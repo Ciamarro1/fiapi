@@ -65,10 +65,10 @@ test('Tier 1: docs_content_type - GET /docs returns text/html', async () => {
   assert.ok(res.headers.get('Content-Type').includes('text/html'));
 });
 
-test('Tier 1: docs_body_contains_title - GET /docs HTML body contains "FIAPI Documentation"', async () => {
+test('Tier 1: docs_body_contains_title - GET /docs HTML body contains "FIAPI AI Platform Documentation"', async () => {
   const res = await fetch(`${BASE_URL}/docs`);
   const body = await res.text();
-  assert.ok(body.includes('FIAPI Documentation'));
+  assert.ok(body.includes('FIAPI AI Platform Documentation'));
 });
 
 test('Tier 1: docs_body_contains_endpoints - GET /docs HTML body contains generate endpoint', async () => {
@@ -92,45 +92,45 @@ test('Tier 1: docs_options - OPTIONS /docs returns 204', async () => {
   assert.strictEqual(res.status, 204);
 });
 
-// GET /v1/models tests
-test('Tier 1: models_status - GET /v1/models returns 200', async () => {
-  const res = await fetch(`${BASE_URL}/v1/models`);
+// GET /v1/images/models tests
+test('Tier 1: models_status - GET /v1/images/models returns 200', async () => {
+  const res = await fetch(`${BASE_URL}/v1/images/models`);
   assert.strictEqual(res.status, 200);
 });
 
-test('Tier 1: models_content_type - GET /v1/models returns application/json', async () => {
-  const res = await fetch(`${BASE_URL}/v1/models`);
+test('Tier 1: models_content_type - GET /v1/images/models returns application/json', async () => {
+  const res = await fetch(`${BASE_URL}/v1/images/models`);
   assert.ok(res.headers.get('Content-Type').includes('application/json'));
 });
 
-test('Tier 1: models_body_success - GET /v1/models has success: true', async () => {
-  const res = await fetch(`${BASE_URL}/v1/models`);
+test('Tier 1: models_body_success - GET /v1/images/models has success: true', async () => {
+  const res = await fetch(`${BASE_URL}/v1/images/models`);
   const body = await res.json();
   assert.strictEqual(body.success, true);
 });
 
-test('Tier 1: models_body_list - GET /v1/models contains models array', async () => {
-  const res = await fetch(`${BASE_URL}/v1/models`);
+test('Tier 1: models_body_list - GET /v1/images/models contains models array', async () => {
+  const res = await fetch(`${BASE_URL}/v1/images/models`);
   const body = await res.json();
-  assert.ok(Array.isArray(body.models));
+  assert.ok(Array.isArray(body.data.models));
 });
 
-test('Tier 1: models_contains_flux - GET /v1/models contains flux-1-schnell model', async () => {
-  const res = await fetch(`${BASE_URL}/v1/models`);
+test('Tier 1: models_contains_flux - GET /v1/images/models contains flux-1-schnell model', async () => {
+  const res = await fetch(`${BASE_URL}/v1/images/models`);
   const body = await res.json();
-  const hasFlux = body.models.some(m => m.id === '@cf/black-forest-labs/flux-1-schnell');
+  const hasFlux = body.data.models.some(m => m.id === '@cf/black-forest-labs/flux-1-schnell');
   assert.ok(hasFlux);
 });
 
-test('Tier 1: models_contains_lightning - GET /v1/models contains stable-diffusion-xl-lightning model', async () => {
-  const res = await fetch(`${BASE_URL}/v1/models`);
+test('Tier 1: models_contains_lightning - GET /v1/images/models contains stable-diffusion-xl-lightning model', async () => {
+  const res = await fetch(`${BASE_URL}/v1/images/models`);
   const body = await res.json();
-  const hasLightning = body.models.some(m => m.id === '@cf/bytedance/stable-diffusion-xl-lightning');
+  const hasLightning = body.data.models.some(m => m.id === '@cf/bytedance/stable-diffusion-xl-lightning');
   assert.ok(hasLightning);
 });
 
-test('Tier 1: models_method_not_allowed_post - POST /v1/models returns 405', async () => {
-  const res = await fetch(`${BASE_URL}/v1/models`, { method: 'POST' });
+test('Tier 1: models_method_not_allowed_post - POST /v1/images/models returns 405', async () => {
+  const res = await fetch(`${BASE_URL}/v1/images/models`, { method: 'POST' });
   assert.strictEqual(res.status, 405);
 });
 
@@ -294,7 +294,7 @@ test('Tier 1: generate_happy_response_metadata_prompt - Metadata prompt matches 
   assert.strictEqual(body.data.metadata.prompt, prompt);
 });
 
-test('Tier 1: generate_happy_response_metadata_timestamp - Metadata contains timestamp', async () => {
+test('Tier 1: generate_happy_response_metadata_timestamp - Platform envelope contains meta timestamp', async () => {
   const res = await fetch(`${BASE_URL}/v1/images/generate`, {
     method: 'POST',
     headers: {
@@ -304,7 +304,7 @@ test('Tier 1: generate_happy_response_metadata_timestamp - Metadata contains tim
     body: JSON.stringify({ prompt: 'timestamp test' })
   });
   const body = await res.json();
-  const timestamp = body.data.metadata.timestamp;
+  const timestamp = body.meta.timestamp;
   assert.ok(timestamp);
   assert.ok(!isNaN(Date.parse(timestamp)));
 });
