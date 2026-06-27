@@ -1,0 +1,26 @@
+{
+  "name": "fiapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/agents.test.js",
+    "dev": "wrangler dev",
+    "test:unit": "vitest run tests/unit",
+    "test:e2e": "node tests/e2e/runner.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@ag-kit/agents": "^0.0.10",
+    "@ag-kit/server": "^0.0.10",
+    "memfs": "^4.46.1"
+  },
+  "devDependencies": {
+    "hono": "^4.12.27",
+    "vitest": "^4.1.9",
+    "wrangler": "^4.105.0"
+  }
+}

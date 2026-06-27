@@ -1,0 +1,7 @@
+name = "fiapi"
+main = "src/index.js"
+compatibility_date = "2024-04-01"
+
+[vars]
+AUTH_TOKEN = "test-token"
+MOCK_AI = "true"
