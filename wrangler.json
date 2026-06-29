@@ -4,9 +4,10 @@
   "compatibility_date": "2024-04-03",
   "vars": {
     "AUTH_TOKEN": "default-secret-token",
-    "MOCK_AI": "true",
+    "MOCK_AI": "false",
     "RATE_LIMIT_MAX": "60",
-    "RATE_LIMIT_WINDOW": "60"
+    "RATE_LIMIT_WINDOW": "60",
+    "KAGGLE_API_URL": "https://unburnished-subepiglottic-lianne.ngrok-free.dev/generate"
   },
   "kv_namespaces": [
     {

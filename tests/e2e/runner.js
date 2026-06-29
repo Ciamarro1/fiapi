@@ -23,8 +23,8 @@ async function main() {
   const isWin = process.platform === 'win32';
   const npxCmd = isWin ? 'npx.cmd' : 'npx';
 
-  // wrangler dev --port 8787
-  const wranglerProcess = spawn(npxCmd, ['wrangler', 'dev', '--port', String(PORT)], {
+  // wrangler dev --local --port 8787
+  const wranglerProcess = spawn(npxCmd, ['wrangler', 'dev', '--local', '--port', String(PORT)], {
     cwd: PROJECT_ROOT,
     env: devEnv,
     shell: true

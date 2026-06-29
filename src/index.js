@@ -51,6 +51,29 @@ app.route('/v1/market',        marketRouter);
 // fiapi-agent-api
 app.route('/v1/agent',         agentRouter);
 
+// Global models endpoint
+app.get('/v1/models', (c) => {
+  return c.json({
+    success: true,
+    models: [
+      { id: '@cf/black-forest-labs/flux-1-schnell',         name: 'Flux 1 Schnell' },
+      { id: '@cf/bytedance/stable-diffusion-xl-lightning',  name: 'Stable Diffusion XL Lightning' },
+      { id: '@cf/stabilityai/stable-diffusion-xl-base-1.0', name: 'Stable Diffusion XL Base 1.0' },
+      { id: '@cf/meta/llama-3-8b-instruct',        name: 'Llama 3 8B Instruct' },
+      { id: '@cf/meta/llama-3-70b-instruct',       name: 'Llama 3 70B Instruct' },
+      { id: '@cf/mistral/mistral-7b-instruct-v0.1', name: 'Mistral 7B Instruct' },
+      { id: '@cf/google/gemma-7b-it',              name: 'Gemma 7B IT' },
+      { id: '@cf/baai/bge-base-en-v1.5',       name: 'BGE Base EN v1.5' },
+      { id: '@cf/baai/bge-large-en-v1.5',      name: 'BGE Large EN v1.5' },
+      { id: '@cf/baai/bge-small-en-v1.5',      name: 'BGE Small EN v1.5' },
+      { id: '@cf/openai/whisper',            name: 'Whisper (ASR)' },
+      { id: '@cf/openai/whisper-large-v3-turbo', name: 'Whisper Large v3 Turbo' },
+      { id: '@cf/llava-hf/llava-1.5-7b-hf', name: 'LLaVA 1.5 7B' },
+      { id: '@cf/unum/uform-gen2-qwen-500m', name: 'UForm Gen2 Qwen 500M' }
+    ]
+  });
+});
+
 // Platform root — list all domains
 app.get('/v1', (c) => {
   return c.json({

@@ -160,6 +160,63 @@ describe('FIAPI Workers Application', () => {
       expect(body.success).toBe(false);
       expect(body.error).toContain('AI Service Unavailable');
     });
+
+    it('should invoke Kaggle API when KAGGLE_API_URL is configured and MOCK_AI is false (JSON response)', async () => {
+      const mockFetch = vi.spyOn(globalThis, 'fetch').mockImplementation(async (url, init) => {
+        return new Response(JSON.stringify({ image: 'dGVzdC1iYXNlNjQ=' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      });
+
+      const res = await app.request('/v1/images/generate', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer test-secret',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt: 'realistic space station' })
+      }, { ...env, MOCK_AI: 'false', KAGGLE_API_URL: 'https://kaggle-endpoint.ngrok-free.dev', RATE_LIMIT_MAX: '20' });
+
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.success).toBe(true);
+      expect(body.data.image).toBe('dGVzdC1iYXNlNjQ=');
+      expect(mockFetch).toHaveBeenCalledWith(
+        'https://kaggle-endpoint.ngrok-free.dev',
+        expect.objectContaining({
+          method: 'POST',
+          body: expect.stringContaining('realistic space station')
+        })
+      );
+
+      mockFetch.mockRestore();
+    });
+
+    it('should invoke Kaggle API when KAGGLE_API_URL is configured and MOCK_AI is false (Binary response)', async () => {
+      const mockFetch = vi.spyOn(globalThis, 'fetch').mockImplementation(async (url, init) => {
+        return new Response(new Uint8Array([10, 20, 30]), {
+          status: 200,
+          headers: { 'Content-Type': 'image/png' }
+        });
+      });
+
+      const res = await app.request('/v1/images/generate', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer test-secret',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt: 'realistic space station' })
+      }, { ...env, MOCK_AI: 'false', KAGGLE_API_URL: 'https://kaggle-endpoint.ngrok-free.dev', RATE_LIMIT_MAX: '20' });
+
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.success).toBe(true);
+      expect(body.data.image).toBe('ChQe');
+
+      mockFetch.mockRestore();
+    });
   });
 
   describe('Rate Limiting Middleware', () => {
